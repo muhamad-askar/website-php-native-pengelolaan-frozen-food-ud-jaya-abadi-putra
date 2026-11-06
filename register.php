@@ -5,27 +5,27 @@ $pesan = "";
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama   = trim($_POST['nama_user']);
-    $email  = trim($_POST['email_user']);
-    $password = $_POST['password_user'];
-    $alamat = trim($_POST['alamat_user']);
-    $role   = trim($_POST['role_user']);
+    $username   = trim($_POST['username'] ?? '');
+    $email      = trim($_POST['email'] ?? '');
+    $password   = $_POST['password'] ?? '';
+    $alamat     = trim($_POST['alamat'] ?? '');
+    $role       = 'user'; // Role default untuk registrasi user
 
-    if (!empty($nama) && !empty($email) && !empty($password)) {
+    if (!empty($username) && !empty($email) && !empty($password)) {
         try {
-            // cek apakah email pernah terdaftar
-            $stmtCek = $pdo->prepare("SELECT * FROM user WHERE email_user = ?");
+            // Cek ketersediaan email pada tabel 'users'
+            $stmtCek = $pdo->prepare("SELECT * FROM users WHERE email = ?");
             $stmtCek->execute([$email]);
 
             if ($stmtCek->rowCount() > 0) {
                 $error = "Email sudah terdaftar, silakan gunakan email lain.";
             } else {
-                // enkripsi password
+                // Enkripsi password
                 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-                // input data ke database
-                $stmt = $pdo->prepare("INSERT INTO user (nama_user, email_user, password_user, alamat_user, role_user) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$nama, $email, $password_hashed, $alamat, $role]);
+                // Simpan data akun ke tabel 'users'
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password, alamat, role) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$username, $email, $password_hashed, $alamat, $role]);
 
                 $pesan = "Registrasi berhasil! Silakan <a href='login.php'>Login di sini</a>.";
             }
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Terjadi kesalahan sistem: " . $e->getMessage();
         }
     } else {
-        $error = "Harap isi kolom yang wajib (Nama, Email, dan Password)!";
+        $error = "Harap isi kolom yang wajib (Username, Email, dan Password)!";
     }
 }
 ?>
@@ -136,46 +136,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-
     <div class="register-card">
         <h2>Welcome New People</h2>
-
         <?php if (!empty($error)): ?>
             <div class="error-msg"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-
         <?php if (!empty($pesan)): ?>
             <div class="success-msg"><?php echo $pesan; ?></div>
         <?php endif; ?>
-
         <form action="" method="POST">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="nama_user" required>
+                <input type="text" name="username" required>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email_user" required>
+                <input type="email" name="email" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password_user" required>
+                <input type="password" name="password" required>
             </div>
             <div class="form-group">
                 <label>Alamat</label>
-                <textarea name="alamat_user" rows="2"></textarea>
+                <textarea name="alamat" rows="2"></textarea>
             </div>
-
-            <form action="" method="POST">
-                <button type="submit" class="btn-reg">Daftar</button>
-            </form>
-
+            <button type="submit" class="btn-reg">Daftar</button>
             <div class="link-login">
                 Sudah punya akun? <a href="login.php">Login di sini</a>
             </div>
         </form>
     </div>
-
 </body>
 
 </html>
