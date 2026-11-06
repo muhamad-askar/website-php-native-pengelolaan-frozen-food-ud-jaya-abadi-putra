@@ -10,13 +10,13 @@ if (!isset($_SESSION['id_user'])) {
 require_once "includes/header.php";
 ?>
 
-    <h2>Selamat Datang, <?php echo htmlspecialchars($_SESSION['nama_user']); ?>!</h2>
-    <p>Anda berhasil login ke sistem UD Jaya Abadi Putra.</p>
-    
-    <br>
-    <a href="logout.php" style="background: red; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px;">Logout (Keluar)</a>
+<h2>Selamat Datang, <?php echo htmlspecialchars($_SESSION['nama_user']); ?>!</h2>
+<p>Anda berhasil login ke sistem UD Jaya Abadi Putra.</p>
 
-<?php 
+<br>
+<a href="logout.php" style="background: red; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px;">Logout (Keluar)</a>
 
-require_once "includes/footer.php"; 
+<?php
+
+require_once "includes/footer.php";
 ?>
