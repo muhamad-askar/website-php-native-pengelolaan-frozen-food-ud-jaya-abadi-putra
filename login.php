@@ -5,19 +5,18 @@ require_once "config/koneksi.php";
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
+    $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (!empty($email) && !empty($password)) {
+    if (!empty($username) && !empty($password)) {
         try {
-            // Menggunakan tabel 'users'
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-            $stmt->execute([$email]);
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+            $stmt->execute([$username]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Verifikasi password & cek keberadaan user
             if ($user && password_verify($password, $user['password'])) {
-                // Simpan data pengguna dalam $_SESSION
+                // Simpan data user dalam $_SESSION
                 $_SESSION['id_user']  = $user['id_user'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role']     = $user['role'];
@@ -29,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 exit;
             } else {
-                $error = "Email atau password salah!";
+                $error = "Username atau password salah!";
             }
         } catch (PDOException $e) {
             $error = "Terjadi kesalahan sistem: " . $e->getMessage();
