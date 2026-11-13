@@ -1,0 +1,32 @@
+
+<?php
+
+// Root direktori proyek
+define(
+    'BASE_PATH',
+    dirname(__DIR__) . DIRECTORY_SEPARATOR
+);
+
+// Base URL proyek
+define(
+    'BASE_URL',
+    '/website-php-native-pengelolaan-frozen-food-ud-jaya-abadi-putra/'
+);
+
+$host = "";
+$user = "";
+$pass = "";
+$db   = "";
+
+try {
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$db;charset=utf8",
+        $user,
+        $pass
+    );
+
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+} catch (PDOException $e) {
+    die("Koneksi database gagal: " . $e->getMessage());
+}
