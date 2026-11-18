@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Image -->
         <div class="image-container">
-            <img src="assets/images/img-login.jpg" alt="Illustration">
+            <img src="assets/img/img-login.jpg" alt="Illustration">
         </div>
     </div>
 </body>
