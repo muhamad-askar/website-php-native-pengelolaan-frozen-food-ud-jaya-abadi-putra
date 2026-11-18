@@ -1,22 +1,13 @@
 <?php
-session_start();
-
-// cek status login
-if (!isset($_SESSION['id_user'])) {
-    header("Location: login.php");
-    exit;
-}
-
+$page_title = "Home";
 require_once "includes/header.php";
 ?>
 
-<h2>Selamat Datang, <?php echo htmlspecialchars($_SESSION['nama_user']); ?>!</h2>
-<p>Anda berhasil login ke sistem UD Jaya Abadi Putra.</p>
+<div class="container">
+    <h2>
+        Selamat Datang<?= isset($_SESSION['username']) ? ', ' . htmlspecialchars($_SESSION['username']) : '' ?>!
+    </h2>
+    <p>Website UD Jaya Abadi Putra.</p>
+</div>
 
-<br>
-<a href="logout.php" style="background: red; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px;">Logout (Keluar)</a>
-
-<?php
-
-require_once "includes/footer.php";
-?>
+<?php require_once "includes/footer.php"; ?>

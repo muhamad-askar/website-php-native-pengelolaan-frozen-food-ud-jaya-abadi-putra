@@ -7,6 +7,8 @@ $error = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
+    // Tombol mana yang ditekan
+    $login_sebagai = isset($_POST['login_admin']) ? 'admin' : 'user';
 
     if (!empty($username) && !empty($password)) {
         try {
@@ -14,34 +16,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$username]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verifikasi password & cek keberadaan user
             if ($user && password_verify($password, $user['password'])) {
-                // Simpan data user dalam $_SESSION
-                $_SESSION['id_user']  = $user['id_user'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role']     = $user['role'];
-
-                if ($user['role'] === 'admin') {
-                    header("Location: admin/dashboard.php");
+                if ($user['role'] !== $login_sebagai) {
+                    $error = ($login_sebagai === 'admin')
+                        ? "Akun ini bukan akun admin."
+                        : "Akun admin silakan gunakan tombol Login as Admin.";
                 } else {
-                    header("Location: index.php");
+                    session_regenerate_id(true);
+                    $_SESSION['id_user']  = $user['id_user'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['role']     = $user['role'];
+
+                    header("Location: " . ($user['role'] === 'admin' ? "admin/dashboard.php" : "index.php"));
+                    exit;
                 }
-                exit;
             } else {
                 $error = "Username atau password salah!";
             }
         } catch (PDOException $e) {
-            $error = "Terjadi kesalahan sistem: " . $e->getMessage();
+            $error = "Terjadi kesalahan sistem. Silakan coba lagi.";
         }
     } else {
         $error = "Harap isi semua kolom!";
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="id">
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -78,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Image -->
         <div class="image-container">
             <img src="assets/images/img-login.jpg" alt="Illustration">
         </div>

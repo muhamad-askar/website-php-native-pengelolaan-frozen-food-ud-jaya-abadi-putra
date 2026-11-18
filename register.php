@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($username) && !empty($email) && !empty($password)) {
         try {
             // Cek ketersediaan email pada tabel 'users'
-            $stmtCek = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-            $stmtCek->execute([$email]);
+            $stmtCek = $pdo->prepare("SELECT 1 FROM users WHERE email = ? OR username = ?");
+            $stmtCek->execute([$email, $username]);
 
-            if ($stmtCek->rowCount() > 0) {
-                $error = "Email sudah terdaftar, silakan gunakan email lain.";
+            if ($stmtCek->fetch()) {
+                $error = "Username atau email sudah terdaftar";
             } else {
                 // Enkripsi password
                 $password_hashed = password_hash($password, PASSWORD_DEFAULT);
