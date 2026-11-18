@@ -3,6 +3,10 @@ session_start();
 require_once "config/koneksi.php";
 
 $error = "";
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
@@ -16,7 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$username]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && password_verify($password, $user['password'])) {
+                        if ($user && password_verify($password, $user['password'])) {
+
+                // Pengaman: role selain admin/user dianggap data akun bermasalah
+                if (!in_array($user['role'], ['admin', 'user'], true)) {
+                    session_unset();
+                    session_destroy();
+                    session_start();
+                    $_SESSION['error'] = 'Terjadi kesalahan pada data akun Anda. Mohon hubungi pihak administrator';
+                    header("Location: login.php");
+                    exit;
+                }
+
+                // Role harus cocok dengan tombol yang ditekan
                 if ($user['role'] !== $login_sebagai) {
                     $error = ($login_sebagai === 'admin')
                         ? "Akun ini bukan akun admin."
@@ -78,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="image-container">
-            <img src="assets/images/img-login.jpg" alt="Illustration">
+            <img src="assets/img/img-login.jpg" alt="Illustration">
         </div>
     </div>
 </body>
