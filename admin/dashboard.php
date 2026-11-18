@@ -1,15 +1,6 @@
 <?php
-
-use PSpell\Config;
-
-session_start();
-require_once __DIR__ . '/../config/koneksi.php';
-
-// Cek validasi role admin
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../login.php");
-    exit;
-}
+require_once '../includes/auth.php';
+require_admin();
 
 // Update Status Pengiriman / Pesanan
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_status') {

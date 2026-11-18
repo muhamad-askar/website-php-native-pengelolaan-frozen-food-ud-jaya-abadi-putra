@@ -43,7 +43,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </style>
 
 <nav class="navbar">
-    <img class="navbar-logo" src="<?= BASE_URL; ?>assets/img/logo.svg" alt="Logo">
+    <img class="navbar-logo" src="<?= BASE_URL ?>assets/img/logo.svg" alt="Logo">
     <div class="nav-links">
         <a href="dashboard.php" class="<?php echo ($page_active === 'dashboard') ? 'active' : ''; ?>">Dashboard Pesanan</a>
         <a href="data_produk.php" class="<?php echo ($page_active === 'data_produk') ? 'active' : ''; ?>">Data Stok & Produk</a>

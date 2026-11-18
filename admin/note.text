@@ -1,0 +1,7 @@
+//kode ini harus ada dipaling atas disetiap file di folder admin
+
+<?php
+require_once '../includes/auth.php';
+require_admin();
+
+///contohnya bisa liat di dashboard.php bagian admin
