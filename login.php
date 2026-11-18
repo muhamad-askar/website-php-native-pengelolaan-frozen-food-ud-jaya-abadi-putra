@@ -23,10 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($user['role'] === 'admin') {
                     header("Location: admin/dashboard.php");
-                } else {
+                    exit;
+                } elseif ($user['role'] === 'user') {
                     header("Location: index.php");
+                    exit;
+                } else {
+                    session_unset();
+                    session_destroy();
+                    session_start();
+                    $_SESSION['error'] = 'Terjadi kesalahan pada data akun Anda. Mohon hubungi pihak administrator';
+                    header("Location: login.php");
+                    exit;
                 }
-                exit;
             } else {
                 $error = "Username atau password salah!";
             }
