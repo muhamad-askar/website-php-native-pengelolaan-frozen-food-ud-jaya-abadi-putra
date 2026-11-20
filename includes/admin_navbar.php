@@ -61,6 +61,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <div class="nav-links">
         <a href="dashboard.php" class="<?php echo ($page_active === 'dashboard') ? 'active' : ''; ?>">Dashboard Pesanan</a>
         <a href="data_produk.php" class="<?php echo ($page_active === 'data_produk') ? 'active' : ''; ?>">Data Stok & Produk</a>
-        <a href="../login.php" class="logout">Logout</a>
+        <a href="../logout.php" class="logout">Logout</a>
     </div>
 </nav>
